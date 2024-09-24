@@ -147,8 +147,8 @@
 
     <div class="login_image">
         <div class="d-flex justify-content-end button">
-        <a href="{{route('loginpage')}}" class="btn btn-success m-2 px-3">Login</a>
-        <a href="{{route('registerpage')}}" class="btn btn-primary m-2 px-3">Signup</a>
+            <a href="{{route('loginpage')}}" class="btn btn-success m-2 px-3">Login</a>
+            <a href="{{route('registerpage')}}" class="btn btn-primary m-2 px-3">Signup</a>
         </div>
 
         <div class="login-container ">

@@ -52,25 +52,27 @@ Route::post("/register", function (Request $request) {
 })->name("registercontroller");
 Route::post("/login", function (Request $request) {
 
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
+    $user = User::where('email', $request->email)->first();
 
-
-    ]);
-
-    if (Auth::attempt($credentials)) {
-
-        return redirect()->route("home");
+    if ($user) {
+        // User exists, now check the password
+        if (Auth::attempt($request->only('email', 'password'))) {
+            return redirect()->route("home");
+        } else {
+            // Password is incorrect
+            return redirect()->back()
+                ->withErrors([
+                    'password' => 'The provided password is incorrect.',
+                ])
+                ->withInput(); // Preserve input data
+        }
     } else {
-
+        // User does not exist
         return redirect()->back()
             ->withErrors([
-                'email' => 'The provided credentials are incorrect.',
-                'password' => 'The provided credentials are incorrect.',
+                'email' => 'No user found with that email address.',
             ])
             ->withInput(); // Preserve input data
-
     }
 })->name("login");
 
@@ -79,3 +81,8 @@ Route::view("/home", "home")->name("home");
 
 
 Route::view("/login", "loginpage")->name("loginpage");
+Route::get("/logout", function () {
+
+    Auth::logout();
+    return redirect()->route('loginpage');
+})->name('logout');
